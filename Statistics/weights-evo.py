@@ -51,7 +51,7 @@ def mad(x):
 
 
 if __name__ == '__main__':
-    base = '/Users/gdetorak/Desktop/DNF-SOM/REF/'
+    base = './data/REF/'
     m, n, q = 1024, 16, 256
     if 0:
         epochs = 35000
@@ -70,14 +70,14 @@ if __name__ == '__main__':
         median = np.array(median)
         mmad = np.array(mmad)
 
-        np.save('mean', mean)
-        np.save('std', std)
-        np.save('median', median)
-        np.save('mad', mmad)
+        np.save('./data/mean', mean)
+        np.save('./data/std', std)
+        np.save('./data/median', median)
+        np.save('./data/mad', mmad)
 
     if 1:
-        mean = np.load('mean.npy')
-        std = np.load('std.npy')
+        mean = np.load('./data/mean.npy')
+        std = np.load('./data/std.npy')
         # median = np.load('median.npy')
         # mmad = np.load('mad.npy')
 

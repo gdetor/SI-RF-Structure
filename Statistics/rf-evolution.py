@@ -49,24 +49,25 @@ def evolution():
 
     mean = np.array(mean, dtype='f')
     std = np.array(std, dtype='f')
-    print mean.shape, std.shape
+    print(mean.shape, std.shape)
 
     np.save('rf_mean_ltgm', mean)
     np.save('rf_std_ltgm', std)
 
     return mean, std
 
+
 if __name__ == '__main__':
     if 0:
         mu, sd = evolution()
 
     if 1:
-        m1 = np.load('rf_mean.npy')
-        m2 = np.load('rf_mean_ltgm.npy')
+        m1 = np.load('./data/rf_mean.npy')
+        m2 = np.load('./data/rf_mean_ltgm.npy')
         mu = np.concatenate((m1, m2))
 
-        sd1 = np.load('rf_std.npy')
-        sd2 = np.load('rf_std_ltgm.npy')
+        sd1 = np.load('./data/rf_std.npy')
+        sd2 = np.load('./data/rf_std_ltgm.npy')
         sd = np.concatenate((sd1, sd2))
 
         fig = plt.figure(figsize=(9, 5))
@@ -85,10 +86,10 @@ if __name__ == '__main__':
         plt.title(r'Evolution of RFs (mean and SD)')
 
         ax.annotate(r'Attention On', xy=(131, .025), xytext=(150, 0.10),
-                    size = 14,
+                    size=14,
                     arrowprops=dict(arrowstyle='->',
                                     fc="0.6",
                                     connectionstyle="arc3,rad=.5")
                     )
-        plt.savefig('evolution-rfs.pdf', frameon=False)
+        plt.savefig('./data/evolution-rfs.pdf', frameon=False)
         plt.show()

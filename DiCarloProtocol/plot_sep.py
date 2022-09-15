@@ -33,40 +33,48 @@
 # Primary Sensory Cortex", Georgios Is. Detorakis and Nicolas P. Rougier,
 # Frontiers in Computational Neuroscience, 2014.
 #
-# It plots the SEP diagram. 
+# It plots the SEP diagram.
 import numpy as np
 import matplotlib.pylab as plt
 
-if __name__=='__main__':
-	folder = '/home/Local/SOM/Attention/REF/'
-	SEP = np.load( folder+'one-neurons-spikes.npy' )[0:120000].reshape(100,1200)
-	Rc = np.load( folder+'convolution-rfs-dots.npy' )
-	drum_length, drum_width = 250*1e-3, 30*1e-3
+if __name__ == '__main__':
+    folder = './data/REF/'
+    SEP = np.load(folder+'one-neurons-spikes.npy')[0:120000].reshape(100, 1200)
+    Rc = np.load(folder+'convolution-rfs-dots.npy')
+    drum_length, drum_width = 250*1e-3, 30*1e-3
 
-	# R = SEP.copy()
-	# X = np.load( folder+'dot-patterns.npy').reshape(120000,16*16)
-	# b = np.dot( np.dot( np.linalg.inv( np.dot( X.T, X ) ), X.T ), R )
-	# np.save( folder+'receptive_field_2016' )
+    # R = SEP.copy()
+    # X = np.load(folder+'dot-patterns.npy').reshape(120000,16*16)
+    # b = np.dot(np.dot( np.linalg.inv(np.dot(X.T, X)), X.T), R)
+    # np.save(folder+'receptive_field_2016')
 
-	plt.figure( figsize=(12,6) )
-	plt.subplots_adjust( wspace=0.0, hspace=.0 )
-	plt.subplot(2,1,1)
-	plt.imshow(Rc, origin='lower', interpolation='bicubic', alpha=1,
-			      cmap = plt.cm.gray_r, extent = [0, drum_length, 0, drum_width])
-	plt.xlim(0,drum_length)
-	plt.xlabel("mm")
-	plt.ylim(0,drum_width)
-	plt.ylabel("mm")
+    plt.figure(figsize=(12, 6))
+    plt.subplots_adjust(wspace=0.0, hspace=.0)
+    plt.subplot(2, 1, 1)
+    plt.imshow(Rc,
+               origin='lower',
+               interpolation='bicubic',
+               alpha=1,
+               cmap=plt.cm.gray_r,
+               extent=[0, drum_length, 0, drum_width])
+    plt.xlim(0, drum_length)
+    plt.xlabel("mm")
+    plt.ylim(0, drum_width)
+    plt.ylabel("mm")
 
-	plt.subplot(2,1,2)
-	# plt.imshow( SEP, aspect=2,interpolation='nearest', cmap=plt.cm.gray_r,
-	# 		vmin=0, vmax=1, origin='lower')
-	plt.imshow(SEP, origin='lower', interpolation='bicubic', alpha=1,
-			      cmap = plt.cm.gray_r, extent = [0, drum_length, 0, drum_width])
-	plt.xlim(0,drum_length)
-	plt.xlabel("mm")
-	plt.ylim(0,drum_width)
-	plt.ylabel("mm")
+    plt.subplot(2, 1, 2)
+    # plt.imshow( SEP, aspect=2,interpolation='nearest', cmap=plt.cm.gray_r,
+    # 		vmin=0, vmax=1, origin='lower')
+    plt.imshow(SEP,
+               origin='lower',
+               interpolation='bicubic',
+               alpha=1,
+               cmap=plt.cm.gray_r,
+               extent=[0, drum_length, 0, drum_width])
+    plt.xlim(0, drum_length)
+    plt.xlabel("mm")
+    plt.ylim(0, drum_width)
+    plt.ylabel("mm")
 
-	# plt.savefig('SEP.pdf', dpi=100 )
-	plt.show()
+    # plt.savefig('SEP.pdf', dpi=100 )
+    plt.show()

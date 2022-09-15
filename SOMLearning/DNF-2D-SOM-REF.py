@@ -68,12 +68,12 @@ def prettyfloat(float):
 
 def print_parameters(n, Rn, Ke, sigma_e, Ki, sigma_i, T, dt, tau, R_noise,
                      epochs):
-    print 'Net size: ', n, 'x', n, 'x', Rn, 'x', Rn
-    print 'Ke:', prettyfloat(Ke), 'sigma_e:', prettyfloat(sigma_e)
-    print 'Ki:', prettyfloat(Ki), 'sigma_i:', prettyfloat(sigma_i)
-    print 'Time:', prettyfloat(T), 'dt:', prettyfloat(dt)
-    print 'tau:', prettyfloat(tau)
-    print 'Noise:', prettyfloat(R_noise), 'Epochs:', epochs
+    print('Net size: ', n, 'x', n, 'x', Rn, 'x', Rn)
+    print('Ke:', prettyfloat(Ke), 'sigma_e:', prettyfloat(sigma_e))
+    print('Ki:', prettyfloat(Ki), 'sigma_i:', prettyfloat(sigma_i))
+    print('Time:', prettyfloat(T), 'dt:', prettyfloat(dt))
+    print('tau:', prettyfloat(tau))
+    print('Noise:', prettyfloat(R_noise), 'Epochs:', epochs)
 
 
 def plot_activity(data):
@@ -92,8 +92,8 @@ def activity_size(data, th):
 if __name__ == '__main__':
     np.random.seed(137)
 
-   # Parameters
-   # --------------------------------------------
+    # Parameters
+    # --------------------------------------------
     Rn = 16          # Receptors count (Rn x Rn)
     R_noise = 0.05   # Receptors placement noise
     n = 32           # Neural field size (n x n)
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     V = np.random.uniform(0.00, 0.01, (n, n))
 
     # You have to replace this by something different!!!
-    folder_o = '/home/Local/SOM/Parameters/75Noise/'
+    folder_o = './data/REF/'
     W = np.random.uniform(W_min, W_max, (n*n, Rn*Rn))
 
     # FFT implementation
@@ -142,8 +142,8 @@ if __name__ == '__main__':
     # --------------------------------------------
     R = np.zeros((Rn*Rn, 2))
     R[:, 0], R[:, 1] = grid(Rn, noise=R_noise)
-    # np.save( folder_o+'gridxcoord', R[:,0] )
-    # np.save( folder_o+'gridycoord', R[:,1] )
+    np.save(folder_o+'gridxcoord', R[:, 0])
+    np.save(folder_o+'gridycoord', R[:, 1])
 
     # Samples generation
     # --------------------------------------------
@@ -165,14 +165,14 @@ if __name__ == '__main__':
 
         # Computes field input accordingly
         D = ((np.abs(W - stimulus)).sum(axis=-1))/float(Rn*Rn)
-        I = (1.0 - D.reshape(n, n)) * alpha
+        Input = (1.0 - D.reshape(n, n)) * alpha
 
         # Field simulation until convergence
-        for l in range(int(T/dt)):
+        for _ in range(int(T/dt)):
             Z = rfft2(V)
             Le = irfft2(Z * We_fft, (n, n)).real
             Li = irfft2(Z * Wi_fft, (n, n)).real
-            U += (-U + (Le - Li) + I) * tau * dt
+            U += (-U + (Le - Li) + Input) * tau * dt
             V = np.maximum(U, 0.0)
 
         # plot_activity(V)
@@ -182,7 +182,7 @@ if __name__ == '__main__':
         W -= lrate * (Le.ravel() * (W - stimulus).T).T
 
         if e % 50 == 0:
-            print e
+            print("Epoch: %d" % e)
             # np.save(folder_o+'weights'+str('%06d' % e), W)
 
         # Field activity reset

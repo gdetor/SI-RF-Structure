@@ -39,10 +39,10 @@ import numpy as np
 import matplotlib.pylab as plt
 
 if __name__ == '__main__':
-    rmse_ref = np.load('rmse.npy')
-    rmse_is = np.load('rmse-is.npy')
-    rmse_ltgm = np.load('rmse-ltgm.npy')
-    rmse_ltgmis = np.load('rmse-ltgmis.npy')
+    rmse_ref = np.load('./data/rmse.npy')
+    rmse_is = np.load('./data/rmse-is.npy')
+    rmse_ltgm = np.load('./data/rmse-ltgm.npy')
+    rmse_ltgmis = np.load('./data/rmse-ltgmis.npy')
 
     fig = plt.figure(figsize=(18, 5))
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     ax.set_xlabel("Epochs")
 
     target = 200
-    base = '/Users/gdetorak/Desktop/DNF-SOM/REF/'
+    base = './data/SOM/REF/'
     fname = ['weights000000.npy', 'weights000500.npy', 'weights001000.npy',
              'weights005000.npy', 'weights010000.npy']
     # RF = np.random.uniform(0,1,(32,32))
@@ -79,7 +79,6 @@ if __name__ == '__main__':
                    cmap=plt.cm.gray)
         ax1.set_title("Epoch %d" % e, fontsize=10)
         ax.scatter([e, ], [rmse_ref[e/50], ], s=20, facecolor='w', zorder=10)
-
 
     n2 = len(rmse_is)
     X = (n1+np.arange(n2))*50

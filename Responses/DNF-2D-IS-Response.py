@@ -65,7 +65,7 @@ def area_of_activity(data):
     return sum(1 for i in data.flatten() if i > 0.0)
 
 
-def dnfsom_activity(n, Rn, l, tau, T, alpha, folder):
+def dnfsom_activity(n, Rn, rf_size, tau, T, alpha, folder):
     ms = 0.001  # ms definition
     dt = 35.0 * ms   # Euler's time step
 
@@ -74,7 +74,7 @@ def dnfsom_activity(n, Rn, l, tau, T, alpha, folder):
     filenames = 'model_response_64_final'
 
     # Allocation of arrays and loading necessary files
-    O = np.zeros((l*n, l*n))
+    response = np.zeros((rf_size*n, rf_size*n))
     W = np.load(folder+filename)
     Rx = np.load(folder+'gridxcoord.npy')
     Ry = np.load(folder+'gridycoord.npy')
@@ -97,44 +97,44 @@ def dnfsom_activity(n, Rn, l, tau, T, alpha, folder):
     Wi_fft = rfft2(ifftshift(Wi[::-1, ::-1]))
 
     # Stimuli generation
-    S = np.zeros((l*l, 2))
-    for i, x in enumerate(np.linspace(0.0, 1.0, l)):
-        for j, y in enumerate(np.linspace(0.0, 1.0, l)):
-            S[i*l+j, 0] = x
-            S[i*l+j, 1] = y
-    dX = np.abs(Rx.reshape(1, Rn*Rn) - S[:, 0].reshape(l*l, 1))
+    S = np.zeros((rf_size*rf_size, 2))
+    for i, x in enumerate(np.linspace(0.0, 1.0, rf_size)):
+        for j, y in enumerate(np.linspace(0.0, 1.0, rf_size)):
+            S[i*rf_size+j, 0] = x
+            S[i*rf_size+j, 1] = y
+    dX = np.abs(Rx.reshape(1, Rn*Rn) - S[:, 0].reshape(rf_size*rf_size, 1))
     dX = np.minimum(dX, 1-dX)
-    dY = np.abs(Ry.reshape(1, Rn*Rn) - S[:, 1].reshape(l*l, 1))
+    dY = np.abs(Ry.reshape(1, Rn*Rn) - S[:, 1].reshape(rf_size*rf_size, 1))
     dY = np.minimum(dY, 1-dY)
     samples = np.sqrt(dX*dX+dY*dY)/mt.sqrt(2.0)
     samples = g(samples, 0.08)
 
     # Calculation of model response
     step = 0
-    jj = 100.0/(float(l))
-    for i in range(l):
-        for j in range(l):
-            D = ((np.abs(W - samples[i*l+j])).sum(axis=-1))/float(Rn*Rn)
-            I = (1.0 - D.reshape(n, n)) * alpha
+    jj = 100.0/(float(rf_size))
+    for i in range(rf_size):
+        for j in range(rf_size):
+            D = ((np.abs(W - samples[i*rf_size+j])).sum(axis=-1))/float(Rn*Rn)
+            Input = (1.0 - D.reshape(n, n)) * alpha
 
             for k in range(int(T/dt)):
                 Z = rfft2(V)
                 Le = irfft2(Z * We_fft, (n, n)).real
                 Li = irfft2(Z * Wi_fft, (n, n)).real
-                U += (-U + (Le - Li) + I) * tau * dt
+                U += (-U + (Le - Li) + Input) * tau * dt
                 V = np.maximum(U, 0)
-            O[i*n:(i+1)*n, j*n:(j+1)*n] = V
+            response[i*n:(i+1)*n, j*n:(j+1)*n] = V
 
             V = np.random.random((n, n)) * .01
             U = np.random.random((n, n)) * .01
         step += jj
         progress_bar(30, step)
 
-    np.save(folder+filenames, O)
-    plt.imshow(O, interpolation='bicubic', cmap=plt.cm.hot,
-               extent=[0, l*n, 0, l*n])
-    plt.xticks(np.arange(0, l*n, n), [])
-    plt.yticks(np.arange(0, l*n, n), [])
+    np.save(folder+filenames, response)
+    plt.imshow(response, interpolation='bicubic', cmap=plt.cm.hot,
+               extent=[0, rf_size*n, 0, rf_size*n])
+    plt.xticks(np.arange(0, rf_size*n, n), [])
+    plt.yticks(np.arange(0, rf_size*n, n), [])
     plt.show()
 
 
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     tau = 1.0
     alpha = 0.1
     # You have to change this!!!
-    folder = '/home/Local/SOM/Attention/IS/'
+    folder = '../data/Attention/IS/'
 
     dnfsom_activity(model_size, num_receptors, rf_resolution, tau, T,
                     alpha, folder)

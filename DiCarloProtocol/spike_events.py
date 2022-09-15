@@ -35,23 +35,24 @@
 #
 # Extract spike events from a firing model [1]
 import numpy as np
-import matplotlib.pylab as plt
-
-def count_nonzero( x ):
-	return sum( 1 for i in x if i>0 )
-
-if __name__=='__main__':
-	folder = '/home/Local/SOM/Attention/REF/'
-	V = np.load( folder+'drum-figure2s-activity.npy' ).reshape(60000,32,32)
-
-	spike = np.zeros((60000,))
-
-	# spike[np.where( V[...,20,16]>0 )] = 1
-	for i in xrange( 60000 ):
-		if V[i,20,16] > 0:
-			spike[i] = 1
+# import matplotlib.pylab as plt
 
 
-	# time = np.arange(60000)
-	# plt.stem( time, spike )
-	# plt.show()
+def count_nonzero(x):
+    return sum(1 for i in x if i > 0)
+
+
+if __name__ == '__main__':
+    folder = './data/REF/'
+    V = np.load(folder+'drum-figure2s-activity.npy').reshape(60000, 32, 32)
+
+    spike = np.zeros((60000,))
+
+    # spike[np.where( V[...,20,16]>0 )] = 1
+    for i in range(60000):
+        if V[i, 20, 16] > 0:
+            spike[i] = 1
+
+    # time = np.arange(60000)
+    # plt.stem( time, spike )
+    # plt.show()

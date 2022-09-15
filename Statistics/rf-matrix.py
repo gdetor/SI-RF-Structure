@@ -37,19 +37,19 @@
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator, FormatStrFormatter
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from matplotlib.patches import Rectangle
 import matplotlib.patheffects as PathEffects
 
+# from matplotlib.ticker import MultipleLocator, FormatStrFormatter
+# from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+# from matplotlib.patches import Rectangle
 
-if __name__=='__main__':
+if __name__ == '__main__':
     n, m = 32, 25
     x, y = 22, 25
-    RFs = np.load('cleared-rfs.npy').reshape(n,n,m,m)
+    RFs = np.load('./data/cleared-rfs.npy').reshape(n, n, m, m)
 
-    fg = 0.0,0.0,0.0
-    bg = 1.0,1.0,1.0
+    fg = 0.0, 0.0, 0.0
+    bg = 1.0, 1.0, 1.0
     matplotlib.rcParams['ytick.major.size'] = 0
     matplotlib.rcParams['ytick.minor.size'] = 9
     matplotlib.rcParams['xtick.major.width'] = .5
@@ -57,58 +57,74 @@ if __name__=='__main__':
     matplotlib.rcParams['xtick.direction'] = 'out'
     matplotlib.rcParams['ytick.direction'] = 'out'
     matplotlib.rcParams['font.size'] = 12.0
-    matplotlib.rc('axes', facecolor = bg)
-    matplotlib.rc('axes', edgecolor = fg)
-    matplotlib.rc('xtick', color = fg)
-    matplotlib.rc('ytick', color = fg)
-    matplotlib.rc('figure', facecolor = bg)
-    matplotlib.rc('savefig', facecolor = bg)
+    matplotlib.rc('axes', facecolor=bg)
+    matplotlib.rc('axes', edgecolor=fg)
+    matplotlib.rc('xtick', color=fg)
+    matplotlib.rc('ytick', color=fg)
+    matplotlib.rc('figure', facecolor=bg)
+    matplotlib.rc('savefig', facecolor=bg)
 
-    plt.figure( figsize=(10,10) )
-#    plt.subplots_adjust( wspace=0.7, hspace=0.7 )
-#    indices = [ ( 3,18), ( 3,11), (29,16),
-#                ( 6, 1), (22,21), ( 2, 7),
-#                (19,26), ( 7,20), (21, 2)]
-#    indices = [(3, 18) , (26, 18) , (10, 7) , (25, 11) , (3, 21) , (8, 11) , (21, 14) , (20, 16) , (8, 19) , (16, 5) , (0, 9) , (17, 15) , (7, 20) , (20, 0) , (27, 19) , (4, 24) ]
+    plt.figure(figsize=(10, 10))
+    # plt.subplots_adjust( wspace=0.7, hspace=0.7 )
+    # indices = [ ( 3,18), ( 3,11), (29,16),
+    #             ( 6, 1), (22,21), ( 2, 7),
+    #             (19,26), ( 7,20), (21, 2)]
 
-#    indices = [(a,b) for (a,b) in np.random.randint(0,32,(32,2))]
+    # indices = [(3, 18), (26, 18), (10, 7), (25, 11), (3, 21), (8, 11),
+    #            (21, 14), (20, 16), (8, 19), (16, 5), (0, 9), (17, 15),
+    #            (7, 20), (20, 0), (27, 19), (4, 24)]
 
-#    indices = [(2, 12) , (5, 9) , (1, 17) , (9, 18) , (2, 14) , (31, 11) , (2, 30) , (5, 16) , (12, 2) , (9, 9) , (24, 22) , (24, 13) , (23, 29) , (30, 6) , (19, 20) , (24, 19)]
+    # indices = [(a,b) for (a,b) in np.random.randint(0,32,(32,2))]
 
-    indices = [(10, 21) , (29, 16) , (28, 14) , (20, 17) , (13, 19) , (3, 15) , (23, 18) , (0, 18) , (8, 31) , (16, 11) , (0, 20) , (24, 13) , (11, 2) , (1, 1) , (19, 20) , (2, 21)]
+    # indices = [(2, 12), (5, 9), (1, 17), (9, 18), (2, 14), (31, 11), (2, 30),
+    #            (5, 16), (12, 2), (9, 9), (24, 22), (24, 13), (23, 29),
+    #            (30, 6), (19, 20), (24, 19)]
 
-    vmin=vmax=0
+    indices = [(10, 21), (29, 16), (28, 14), (20, 17), (13, 19), (3, 15),
+               (23, 18), (0, 18), (8, 31), (16, 11), (0, 20), (24, 13),
+               (11, 2), (1, 1), (19, 20), (2, 21)]
+
+    vmin = vmax = 0
     for i in range(4):
         for j in range(4):
             index = i*4+j
-            y,x = indices[index]
-            RF = RFs[y,x]
-            vmin = min(vmin,RF.min())
-            vmax = max(vmax,RF.max())
+            y, x = indices[index]
+            RF = RFs[y, x]
+            vmin = min(vmin, RF.min())
+            vmax = max(vmax, RF.max())
 
     for i in range(4):
         for j in range(4):
             index = i*4+j
-            y,x = indices[index]
+            y, x = indices[index]
 
-            RF = RFs[y,x]
+            RF = RFs[y, x]
 
 #            s0,s1 = np.unravel_index(np.argmax(RF),RF.shape)
 #            RF = np.roll(RF,12-s0,axis=0)
 #            RF = np.roll(RF,12-s1,axis=1)
 
-            vmin, vmax =  RF.min(), RF.max()
+            vmin, vmax = RF.min(), RF.max()
 
-            plt.subplot2grid((4,4),(i,j),rowspan=1,colspan=1)
-            plt.imshow( RF, interpolation='nearest', cmap=plt.cm.gray_r, origin='lower',
-                        vmin=vmin, vmax=vmax)
+            plt.subplot2grid((4, 4), (i, j), rowspan=1, colspan=1)
+            plt.imshow(RF,
+                       interpolation='nearest',
+                       cmap=plt.cm.gray_r,
+                       origin='lower',
+                       vmin=vmin,
+                       vmax=vmax)
 
-            plt.axis([0,RFs.shape[2]-1,0,RFs.shape[2]-1])
+            plt.axis([0, RFs.shape[2]-1, 0, RFs.shape[2]-1])
             plt.xticks([]), plt.yticks([])
-            plt.text(1,1,'%c' % (ord('A')+index), weight='bold', fontsize=20, color='w',
-                  path_effects=[PathEffects.withStroke(linewidth=1.5, foreground="k", alpha=.5)])
+            plt.text(1, 1,
+                     '%c' % (ord('A')+index),
+                     weight='bold',
+                     fontsize=20,
+                     color='w',
+                     path_effects=[PathEffects.withStroke(linewidth=1.5,
+                                                          foreground="k",
+                                                          alpha=.5)])
 
-
-    print vmin,vmax
-    plt.savefig('matrix-rfs.pdf', dpi=100 )
+    print(vmin, vmax)
+    plt.savefig('./data/matrix-rfs.pdf', dpi=100)
     plt.show()

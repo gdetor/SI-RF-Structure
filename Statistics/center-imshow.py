@@ -39,52 +39,61 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.ndimage as ndi
 
-def imshow(Z, I, vmin, vmax):
+
+def imshow(Z, img, vmin, vmax):
     axis = plt.gca()
 
-    plt.imshow(I, interpolation='bicubic', cmap=plt.cm.Purples, extent=[0,1,0,1],
-		    origin='lower', vmin=vmin, vmax=vmax)
-    axis.scatter(Z[:,1],Z[:,0],s=10,facecolors='w',edgecolors='k',lw=.5, alpha=.85, zorder=2)
-    axis.set_xlim(0,1)
-    axis.set_ylim(0,1)
+    plt.imshow(img,
+               interpolation='bicubic',
+               cmap=plt.cm.Purples,
+               extent=[0, 1, 0, 1],
+               origin='lower',
+               vmin=vmin,
+               vmax=vmax)
+    axis.scatter(Z[:, 1], Z[:, 0], s=10, facecolors='w',
+                 edgecolors='k', lw=.5, alpha=.85, zorder=2)
+    axis.set_xlim(0, 1)
+    axis.set_ylim(0, 1)
+
 
 def diffuse(Z):
-	Z = Z.reshape(n*n,2)
-    	img = np.zeros((256,256))
-    	for i in xrange(n*n):
-		x,y = Z[i] * (256,256)
-		img[x,y] += 1
-	return ndi.gaussian_filter(img, (12,12), mode='wrap')
+    Z = Z.reshape(n*n, 2)
+    img = np.zeros((256, 256))
+    for i in range(n*n):
+        x, y = Z[i] * (256, 256)
+        img[x, y] += 1
+    return ndi.gaussian_filter(img, (12, 12), mode='wrap')
+
 
 if __name__ == '__main__':
-	n = 32
-	folder = '/home/Local/SOM/Attention/'
-	REF    = np.load( folder+'REF/centers.npy').reshape(n*n,2)
-	LTGM   = np.load( folder+'LTGM/centers.npy').reshape(n*n,2)
-	IS     = np.load( folder+'IS/centers.npy').reshape(n*n,2)
-	LTGMIS = np.load( folder+'LTGM-IS/centers.npy').reshape(n*n,2)
+    n = 32
+    folder = './data/Attention/'
+    REF = np.load(folder+'REF/centers.npy').reshape(n*n, 2)
+    LTGM = np.load(folder+'LTGM/centers.npy').reshape(n*n, 2)
+    IS = np.load(folder+'IS/centers.npy').reshape(n*n, 2)
+    LTGMIS = np.load(folder+'LTGM-IS/centers.npy').reshape(n*n, 2)
 
-	REF_I = diffuse(REF)
-    	vmin,vmax = REF_I.min(),REF_I.max()
-    	LTGM_I = diffuse(LTGM)
-    	vmin,vmax = min(LTGM_I.min(),vmin), max(LTGM_I.max(),vmax)
-    	IS_I = diffuse(IS)
-    	vmin,vmax = min(IS_I.min(),vmin), max(IS_I.max(),vmax)
-    	LTGMIS_I = diffuse(LTGMIS)
-    	vmin,vmax = min(LTGMIS_I.min(),vmin), max(LTGMIS_I.max(),vmax)
+    REF_I = diffuse(REF)
+    vmin, vmax = REF_I.min(), REF_I.max()
+    LTGM_I = diffuse(LTGM)
+    vmin, vmax = min(LTGM_I.min(), vmin), max(LTGM_I.max(), vmax)
+    IS_I = diffuse(IS)
+    vmin, vmax = min(IS_I.min(), vmin), max(IS_I.max(), vmax)
+    LTGMIS_I = diffuse(LTGMIS)
+    vmin, vmax = min(LTGMIS_I.min(), vmin), max(LTGMIS_I.max(), vmax)
 
-    	plt.figure(figsize=(15,15))
+    plt.figure(figsize=(15, 15))
 
-    	plt.subplot(2,2,1,aspect=1)
-    	imshow( REF, REF_I, vmin, vmax )
+    plt.subplot(2, 2, 1, aspect=1)
+    imshow(REF, REF_I, vmin, vmax)
 
-    	plt.subplot(2,2,2,aspect=1)
-    	imshow( IS, IS_I, vmin, vmax )
+    plt.subplot(2, 2, 2, aspect=1)
+    imshow(IS, IS_I, vmin, vmax)
 
-    	plt.subplot(2,2,3,aspect=1)
-    	imshow( LTGM, LTGM_I, vmin, vmax )
+    plt.subplot(2, 2, 3, aspect=1)
+    imshow(LTGM, LTGM_I, vmin, vmax)
 
-    	plt.subplot(2,2,4,aspect=1)
-    	imshow( LTGMIS, LTGMIS_I, vmin, vmax )
+    plt.subplot(2, 2, 4, aspect=1)
+    imshow(LTGMIS, LTGMIS_I, vmin, vmax)
 
-    	plt.show()
+    plt.show()

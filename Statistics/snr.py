@@ -60,10 +60,11 @@ def snr(signal, sigma):
 
     return snr, noise_index, filtered_s
 
+
 if __name__ == '__main__':
     n, k = 32, 25
     # Change the folder!!!
-    folder = '/home/Local/SOM/Attention/REF/'
+    folder = './data/Attention/REF/'
     # RFs_mask = np.load( folder+'RFs.npy' ).reshape(n*n,k*k)
     RFs_regr = np.load(folder+'real-rfs.npy')
 

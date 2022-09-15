@@ -67,12 +67,12 @@ def prettyfloat(float):
 
 def print_parameters(n, Rn, Ke, sigma_e, Ki, sigma_i, T, dt, tau, R_noise,
                      epochs):
-    print 'Net size: ', n, 'x', n, 'x', Rn, 'x', Rn
-    print 'Ke:', prettyfloat(Ke), 'sigma_e:', prettyfloat(sigma_e)
-    print 'Ki:', prettyfloat(Ki), 'sigma_i:', prettyfloat(sigma_i)
-    print 'Time:', prettyfloat(T), 'dt:', prettyfloat(dt)
-    print 'tau:', prettyfloat(tau)
-    print 'Noise:', prettyfloat(R_noise), 'Epochs:', epochs
+    print('Net size: ', n, 'x', n, 'x', Rn, 'x', Rn)
+    print('Ke:', prettyfloat(Ke), 'sigma_e:', prettyfloat(sigma_e))
+    print('Ki:', prettyfloat(Ki), 'sigma_i:', prettyfloat(sigma_i))
+    print('Time:', prettyfloat(T), 'dt:', prettyfloat(dt))
+    print('tau:', prettyfloat(tau))
+    print('Noise:', prettyfloat(R_noise), 'Epochs:', epochs)
 
 
 def test_plot_fun(data):
@@ -119,8 +119,8 @@ if __name__ == '__main__':
     U = np.random.uniform(0.00, 0.01, (n, n))
     V = np.random.uniform(0.00, 0.01, (n, n))
 
-    folder_base = '/home/Local/SOM/Attention/REF/'
-    folder = '/home/Local/SOM/Attention/LTGM-IS/'
+    folder_base = './data/REF/'
+    folder = './data/LTGM-IS/'
     W = np.load(folder_base+'weights025000.npy')
 
     # FFT implementation
@@ -201,14 +201,14 @@ if __name__ == '__main__':
 
         # Computes field input accordingly
         D = ((np.abs(W - stimulus)).sum(axis=-1))/float(Rn*Rn)
-        I = (1.0 - D.reshape(n, n)) * alpha
+        Input = (1.0 - D.reshape(n, n)) * alpha
 
         # Field simulation until convergence
-        for l in range(int(T/dt)):
+        for _ in range(int(T/dt)):
             Z = rfft2(V)
             Le = irfft2(Z * We_fft, (n, n)).real
             Li = irfft2(Z * Wi_fft, (n, n)).real
-            U += (-U + (Le - Li) + I) * tau * dt
+            U += (-U + (Le - Li) + Input) * tau * dt
             V = np.maximum(U, 0.0)
 
         # test_plot_fun( V )
@@ -218,7 +218,7 @@ if __name__ == '__main__':
         W -= lrate * (Le.ravel() * (W - stimulus).T).T
 
         if e % 50 == 0:
-            print e
+            print("Epoch: %d" % e)
             # np.save(folder_o+'weights'+str('%06d' % e), W)
 
         # Field activity reset
@@ -241,5 +241,5 @@ if __name__ == '__main__':
     plt.yticks(np.arange(0, n*m, m), [])
     plt.grid()
 
-    print 'Attention: ', counter_one, 'Normal: ', counter_two
+    print('Attention: ', counter_one, 'Normal: ', counter_two)
     plt.show()

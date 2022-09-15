@@ -53,7 +53,7 @@ def rf_sub_size(Input, net_size, resolution):
 
     X, Y = np.meshgrid(np.arange(Z.shape[0]), np.arange(Z.shape[1]))
 
-    count_roi, count_nroi, count_tot = 0, 0, 0
+    # count_roi, count_nroi, count_tot = 0, 0, 0
     plt.ion()
     for i in range(net_size):
         for j in range(net_size):
@@ -89,14 +89,14 @@ if __name__ == '__main__':
     resolution = 25
 
     # You have to modify the folders!!!
-    folder = '/home/Local/SOM/Attention/IS/'
+    folder = './data/Attention/IS/'
     Rx = np.load(folder+'gridxcoord.npy')
     Ry = np.load(folder+'gridycoord.npy')
 
-    O = np.load(folder+'RFs.npy')
+    rfs = np.load(folder+'RFs.npy')
 
-    C_e, R_e, size_e = rf_sub_size(O, net_size, resolution)
-    print sum(np.isnan(C_e[..., 0]))
+    C_e, R_e, size_e = rf_sub_size(rfs, net_size, resolution)
+    print(sum(np.isnan(C_e[..., 0])))
 
     plt.figure(figsize=(8, 8))
     plot_rfs(size_e, C_e, Rx, Ry, 'b')

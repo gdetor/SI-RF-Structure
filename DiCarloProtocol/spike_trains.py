@@ -36,31 +36,31 @@
 # This script generates the spike trains for each neuron of the neural field
 # model given in [1], when it reproduces the protocol of Dicarlo et al. 1998.
 # Use this script with the spike_events.py, responses.py and plot_set.py
-# scripts. 
+# scripts.
 import numpy as np
 import matplotlib.pylab as plt
 
 if __name__ == '__main__':
-	folder = '/home/Local/SOM/Attention/REF/'
-	response = np.load( folder+'activity_total.npy' )
-	print response.shape
-	n, m = 32, response.shape[0]
-	response = response.reshape(m,n,n)
+    folder = './data/REF/'
+    response = np.load(folder+'activity_total.npy')
+    print(response.shape)
+    n, m = 32, response.shape[0]
+    response = response.reshape(m, n, n)
 
-	neurons_map = np.zeros((n*n,m))
-	spikes_map = np.zeros((n*n,m))
-	for i in xrange( n ):
-		for j in xrange( n ):
-			for k in xrange( m ):
-				neurons_map[i*n+j,k] = response[k,i,j]
-				# if response[k,i,j] > 0:
-				# 	spikes_map[i*n+j,k] = 1
+    neurons_map = np.zeros((n*n, m))
+    spikes_map = np.zeros((n*n, m))
+    for i in range(n):
+        for j in range(n):
+            for k in range(m):
+                neurons_map[i*n+j, k] = response[k, i, j]
+                # if response[k,i,j] > 0:
+                # 	spikes_map[i*n+j,k] = 1
 
-	# np.savetxt( folder+'spike_trains.dat', neurons_map )
-	np.save( folder+'spike_trains.npy', neurons_map )
+    # np.savetxt( folder+'spike_trains.dat', neurons_map )
+    np.save(folder+'spike_trains.npy', neurons_map)
 
-	plt.plot( np.linspace(0,1,m), neurons_map[] )
-	# plt.plot( spikes_map[6] )
-	plt.ylim([0,2])
-	plt.xlim([0,m])
-	plt.show()
+    plt.plot(np.linspace(0, 1, m), neurons_map)
+    # plt.plot( spikes_map[6] )
+    plt.ylim([0, 2])
+    plt.xlim([0, m])
+    plt.show()
